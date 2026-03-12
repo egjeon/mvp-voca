@@ -1,0 +1,4 @@
+INSERT INTO WORD (DAY_NUMBER, WORD, PART_OF_SPEECH, MEANING, SYNONYMS, ANTONYMS) VALUES (1, 'Tenacious', 'a', '끈질긴, 집요한', 'persistent, stubborn', 'yielding');
+INSERT INTO WORD (DAY_NUMBER, WORD, PART_OF_SPEECH, MEANING, SYNONYMS, ANTONYMS) VALUES (1, 'Ambiguous', 'a', '모호한, 불분명한', 'vague, obscure', 'clear, explicit');
+INSERT INTO WORD (DAY_NUMBER, WORD, PART_OF_SPEECH, MEANING, SYNONYMS, ANTONYMS) VALUES (2, 'Pragmatic', 'a', '실용적인', 'practical', 'idealistic');
+INSERT INTO WORD (DAY_NUMBER, WORD, PART_OF_SPEECH, MEANING, SYNONYMS, ANTONYMS) VALUES (2, 'Alleviate', 'v', '완화시키다', 'relieve, assuage', 'aggravate');
