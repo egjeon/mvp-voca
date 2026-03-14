@@ -6,298 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>퀴즈 - DAY ${dayNum}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-            background: linear-gradient(135deg, #0f0e17 0%, #1a1040 50%, #0d1b2a 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #e2e8f0;
-            padding: 20px;
-        }
-
-        .quiz-wrapper {
-            width: 100%;
-            max-width: 520px;
-        }
-
-        /* ===== QUIZ SCREEN ===== */
-        #quiz-screen { animation: fadeIn 0.3s ease; }
-
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .day-label {
-            font-size: 12px;
-            letter-spacing: 3px;
-            color: #64748b;
-            text-transform: uppercase;
-        }
-
-        .question-counter {
-            font-size: 13px;
-            color: #94a3b8;
-            font-weight: 600;
-        }
-
-        /* Progress dots */
-        .progress-dots {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #1e293b;
-            transition: background 0.3s;
-        }
-        .dot.correct { background: #10b981; }
-        .dot.wrong   { background: #ef4444; }
-        .dot.current { background: #7c3aed; box-shadow: 0 0 6px #7c3aed; }
-
-        /* Timer */
-        .timer-container { margin-bottom: 8px; }
-
-        .timer-bar-bg {
-            height: 6px;
-            background: #1e293b;
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 6px;
-        }
-
-        #timer-bar {
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(90deg, #10b981, #34d399);
-            border-radius: 3px;
-            transition: width 1s linear, background 1s linear;
-        }
-
-        .timer-text {
-            text-align: right;
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        #timer-num {
-            font-weight: 700;
-            color: #94a3b8;
-        }
-
-        /* Word card */
-        .word-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 16px;
-            padding: 32px 24px;
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
-        #word-text {
-            font-size: 38px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: #f1f5f9;
-            margin-bottom: 6px;
-        }
-
-        #pos-text {
-            font-size: 14px;
-            color: #7c3aed;
-            font-style: italic;
-        }
-
-        /* Options */
-        #options-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .option-btn {
-            padding: 16px 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.04);
-            color: #cbd5e1;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            text-align: center;
-            word-break: keep-all;
-            line-height: 1.4;
-        }
-
-        .option-btn:hover:not(:disabled) {
-            background: rgba(124, 58, 237, 0.15);
-            border-color: rgba(124, 58, 237, 0.4);
-            color: #e2e8f0;
-        }
-
-        .option-btn:disabled { cursor: not-allowed; }
-
-        .option-btn.correct {
-            background: rgba(16, 185, 129, 0.2) !important;
-            border-color: #10b981 !important;
-            color: #6ee7b7 !important;
-        }
-
-        .option-btn.wrong {
-            background: rgba(239, 68, 68, 0.2) !important;
-            border-color: #ef4444 !important;
-            color: #fca5a5 !important;
-        }
-
-        /* ===== RESULT SCREEN ===== */
-        #result-screen {
-            display: none;
-            text-align: center;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .result-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 20px;
-            padding: 48px 32px;
-        }
-
-        .result-emoji {
-            font-size: 64px;
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        .result-grade {
-            font-size: 36px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            margin-bottom: 24px;
-        }
-
-        .grade-perfect   { color: #fbbf24; }
-        .grade-excellent { color: #34d399; }
-        .grade-great     { color: #60a5fa; }
-        .grade-try       { color: #f97316; }
-        .grade-study     { color: #f87171; }
-
-        .result-percent {
-            font-size: 64px;
-            font-weight: 800;
-            background: linear-gradient(90deg, #a78bfa, #60a5fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        .result-score {
-            font-size: 16px;
-            color: #64748b;
-            margin-bottom: 36px;
-        }
-
-        .result-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .btn-action {
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            border: none;
-            transition: all 0.2s;
-        }
-
-        .btn-home {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #94a3b8;
-        }
-        .btn-home:hover { background: rgba(255,255,255,0.1); color: #e2e8f0; }
-
-        .btn-retry {
-            background: linear-gradient(135deg, #7c3aed, #4f46e5);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-        }
-        .btn-retry:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6); }
-
-        .hidden { display: none !important; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            15%       { transform: translateX(-6px) rotate(-0.5deg); }
-            30%       { transform: translateX(6px) rotate(0.5deg); }
-            45%       { transform: translateX(-5px); }
-            60%       { transform: translateX(5px); }
-            75%       { transform: translateX(-3px); }
-            90%       { transform: translateX(3px); }
-        }
-
-        @keyframes danger-pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(239,68,68,0); }
-            50%       { transform: scale(1.012); box-shadow: 0 0 28px rgba(239,68,68,0.35); }
-        }
-
-        @keyframes vignette-pulse {
-            0%, 100% { opacity: 0.5; }
-            50%       { opacity: 1; }
-        }
-
-        /* 위험 상태 오버레이 */
-        #danger-vignette {
-            pointer-events: none;
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(ellipse at center, transparent 40%, rgba(200,0,0,0.55) 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 999;
-        }
-
-        body.danger-low  #danger-vignette { opacity: 0.45; animation: vignette-pulse 1s ease-in-out infinite; }
-        body.danger-high #danger-vignette { opacity: 0.8;  animation: vignette-pulse 0.5s ease-in-out infinite; }
-
-        body.danger-low  { background: linear-gradient(135deg, #1a0a0a 0%, #2a0d1a 50%, #1a0808 100%); }
-        body.danger-high { background: linear-gradient(135deg, #2a0000 0%, #3d0a0a 50%, #1f0000 100%); }
-
-        .word-card.danger-low  { animation: danger-pulse 1s ease-in-out infinite; border-color: rgba(239,68,68,0.3); }
-        .word-card.danger-high { animation: danger-pulse 0.5s ease-in-out infinite; border-color: rgba(239,68,68,0.7); }
-
-        .quiz-wrapper.shake { animation: shake 0.4s ease-in-out; }
-    </style>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/quiz-container.css">
 </head>
 <body>
 
 <!-- 위험 비네트 오버레이 -->
 <div id="danger-vignette"></div>
+
+<!-- BGM / 효과음 토글 -->
+<button class="sound-btn" id="bgm-btn" onclick="toggleBGM()" title="BGM 켜기/끄기">🎵</button>
 
 <!-- JSON 데이터 -->
 <script id="quiz-data" type="application/json">${quizListJson}</script>
@@ -346,6 +64,124 @@
 </div>
 
 <script>
+    // ===== AUDIO ENGINE =====
+    let audioCtx = null;
+    let bgmScheduler = null;
+    let bgmStep = 0;
+    let bgmNextTime = 0;
+    let bgmGainNode = null;
+    let bgmActive = false;
+
+    const NOTE = {
+        C3:130.81, E3:164.81, G3:196.00,
+        C5:523.25, D5:587.33, E5:659.25, G5:783.99, A5:880.00
+    };
+
+    // 8비트 스타일 루프 멜로디 (C장조, 16 스텝)
+    const BGM_MELODY = [
+        NOTE.C5, NOTE.E5, NOTE.G5, NOTE.A5, NOTE.G5, NOTE.E5, NOTE.D5, NOTE.E5,
+        NOTE.C5, NOTE.D5, NOTE.E5, NOTE.G5, NOTE.A5, NOTE.G5, NOTE.E5, NOTE.C5
+    ];
+    const BGM_BASS = [
+        NOTE.C3, 0, NOTE.G3, 0, NOTE.C3, 0, NOTE.E3, 0,
+        NOTE.C3, 0, NOTE.G3, 0, NOTE.C3, 0, NOTE.G3, 0
+    ];
+
+    function getCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+    }
+
+    function tone(freq, type, vol, start, dur, dest) {
+        const ctx = getCtx();
+        const osc = ctx.createOscillator();
+        const g   = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        g.gain.setValueAtTime(vol, start);
+        g.gain.exponentialRampToValueAtTime(0.001, start + dur);
+        osc.connect(g);
+        g.connect(dest || ctx.destination);
+        osc.start(start);
+        osc.stop(start + dur + 0.02);
+    }
+
+    function scheduleBGM() {
+        const ctx = getCtx();
+        while (bgmNextTime < ctx.currentTime + 0.4) {
+            const s = bgmStep % 16;
+            tone(BGM_MELODY[s], 'triangle', 0.18, bgmNextTime, 0.20, bgmGainNode);
+            if (BGM_BASS[s]) {
+                tone(BGM_BASS[s], 'sine', 0.20, bgmNextTime, 0.44, bgmGainNode);
+            }
+            bgmNextTime += 0.25; // 8분음표 @ 120 BPM
+            bgmStep++;
+        }
+    }
+
+    function startBGM() {
+        const ctx = getCtx();
+        bgmGainNode = ctx.createGain();
+        bgmGainNode.gain.value = 1;
+        bgmGainNode.connect(ctx.destination);
+        bgmStep = 0;
+        bgmNextTime = ctx.currentTime + 0.05;
+        scheduleBGM();
+        bgmScheduler = setInterval(scheduleBGM, 100);
+        bgmActive = true;
+        document.getElementById('bgm-btn').textContent = '🔈';
+    }
+
+    function stopBGM() {
+        clearInterval(bgmScheduler);
+        if (bgmGainNode) {
+            try { bgmGainNode.gain.setTargetAtTime(0, getCtx().currentTime, 0.1); } catch(e) {}
+        }
+        bgmActive = false;
+        document.getElementById('bgm-btn').textContent = '🎵';
+    }
+
+    function toggleBGM() {
+        bgmActive ? stopBGM() : startBGM();
+    }
+
+    // 정답 효과음: 상승 아르페지오 (취링~)
+    function playCorrect() {
+        const ctx = getCtx();
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+            tone(f, 'sine', 0.30, ctx.currentTime + i * 0.09, 0.22, null);
+        });
+    }
+
+    // 오답 효과음: 하강 버즈 (삐~)
+    function playWrong() {
+        const ctx = getCtx();
+        const osc = ctx.createOscillator();
+        const g   = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(260, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.4);
+        g.gain.setValueAtTime(0.28, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.42);
+    }
+
+    // 타이머 경고음: 빙빙 (두 번 삑)
+    function playTimerBeep() {
+        const ctx = getCtx();
+        [0, 0.18].forEach(offset => {
+            tone(880, 'square', 0.15, ctx.currentTime + offset, 0.10, null);
+        });
+    }
+
+    // 첫 클릭 시 AudioContext 활성화
+    document.addEventListener('click', () => getCtx(), { once: true });
+
+    // ===== QUIZ LOGIC =====
     const quizWords = JSON.parse(document.getElementById('quiz-data').textContent);
     const allWords  = JSON.parse(document.getElementById('all-words-data').textContent);
 
@@ -416,6 +252,7 @@
 
         } else {
             bar.style.background = 'linear-gradient(90deg, #ef4444, #f87171)';
+            playTimerBeep();
 
             if (timeLeft <= 2) {
                 body.classList.remove('danger-low');
@@ -511,9 +348,11 @@
             btn.classList.add('correct');
             results.push('correct');
             score++;
+            playCorrect();
         } else {
             btn.classList.add('wrong');
             results.push('wrong');
+            playWrong();
             buttons.forEach(b => {
                 if (b.textContent === correct) b.classList.add('correct');
             });
@@ -527,6 +366,7 @@
         answered = true;
         clearDangerEffects();
         results.push('wrong');
+        playWrong();
 
         const correct = quizWords[currentIdx].meaning;
         document.querySelectorAll('.option-btn').forEach(b => {

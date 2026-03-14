@@ -1,0 +1,8 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    background: linear-gradient(135deg, #0f0e17 0%, #1a1040 50%, #0d1b2a 100%);
+    min-height: 100vh;
+    color: #e2e8f0;
+}

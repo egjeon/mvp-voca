@@ -3,17 +3,7 @@
 <html>
 <head>
     <title>VOCA SPEED QUIZ</title>
-    <style>
-        body { font-family: 'Malgun Gothic', sans-serif; text-align: center; background-color: #f8f9fa; }
-        .quiz-container { max-width: 500px; margin: 50px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .timer-bar { height: 10px; background: #e0e0e0; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
-        #timer-progress { height: 100%; background: #ff4757; width: 100%; transition: width 1s linear; }
-        .word { font-size: 40px; font-weight: bold; margin-bottom: 30px; color: #2f3542; }
-        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #edeff2; border-radius: 8px; background: white; cursor: pointer; font-size: 18px; transition: 0.2s; }
-        .option-btn:hover { background: #f1f2f6; border-color: #ced4da; }
-        .correct { background: #2ed573 !important; color: white; border-color: #2ed573; }
-        .wrong { background: #ff4757 !important; color: white; border-color: #ff4757; }
-    </style>
+    <link rel="stylesheet" href="/css/quiz.css">
 </head>
 <body>
 <div class="quiz-container">
